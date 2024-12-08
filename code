@@ -1,4 +1,4 @@
-#include <SFML/Graphics.hpp>
+#include <SFML/Graphics.hpp> //Говорю сразу чтоб клетки начали менятся нажмите W с англ раскладкой
 #include <iostream>
 
 using namespace sf;
@@ -7,21 +7,21 @@ using namespace sf;
 
 int main()
 {
-	const int shirinaokna = 300;
+	const int shirinaokna = 300; 
 	const int visotaokna = 150;
-	const int tilescale = 3;
+	const int tilescale = 3; //Отвечает за размеры клетки, можна изменить тем самым поменять маштаб но окуратно чото может сломатся
 	bool beforw[shirinaokna][visotaokna] = { 0 };
 	bool afterw[shirinaokna][visotaokna] = { 0 };
-	float zaderjka = 0.005f;
+	float zaderjka = 0.005f; //отвечает за задержку перед изменением
 	int neigbour;
 
 
     RectangleShape tileBlack(Vector2f(tilescale, tilescale));
-	tileBlack.setFillColor(Color::Black);
+	tileBlack.setFillColor(Color::Black); //изначальный цвет клетки можно менять на 1, 2, 3 итд до 8 снизу в коде это есть
 
 	
 
-	RenderWindow window(VideoMode(shirinaokna * tilescale, visotaokna * tilescale), "Life game");
+	RenderWindow window(VideoMode(shirinaokna * tilescale, visotaokna * tilescale), "Life game");//окно создается
 	
 	
 	
@@ -36,21 +36,21 @@ int main()
 		Event event;
 		while (window.pollEvent(event)){if (event.type == Event::Closed)  window.close();}
 			
-		Vector2i PixelyPos = Mouse::getPosition(window);
+		Vector2i PixelyPos = Mouse::getPosition(window);//позиция мыши узнается
 		Vector2f mospos = window.mapPixelToCoords(PixelyPos);
 
-		if (Mouse::isButtonPressed(Mouse::Left))
+		if (Mouse::isButtonPressed(Mouse::Left))//создание живой клеткина левую кнопку мыши
 		{
 			beforw[int(mospos.x / tilescale)][int(mospos.y / tilescale)] = true;
 			afterw[int(mospos.x / tilescale)][int(mospos.y / tilescale)] = true;
 		}
-		if (Mouse::isButtonPressed(Mouse::Right))
+		if (Mouse::isButtonPressed(Mouse::Right))//удаление клетки на правую кнопку мыши
 		{
 			beforw[int(mospos.x / tilescale)][int(mospos.y / tilescale)] = false;
 			afterw[int(mospos.x / tilescale)][int(mospos.y / tilescale)] = false;
 		}
 
-		if(Keyboard::isKeyPressed(Keyboard::R))
+		if(Keyboard::isKeyPressed(Keyboard::R)) //перезапуск карты
 		{
 			for (int w = 0; w < shirinaokna; w++)
 			{
@@ -73,7 +73,7 @@ int main()
 			for (int w = 0; w < shirinaokna; w++)
 			{
 				for (int h = 0; h < visotaokna; h++)
-				{
+				{//проверка соседей
 				   neigbour = beforw[(w + shirinaokna - 1) % shirinaokna][h]
 					       	+ beforw[(w + shirinaokna + 1) % shirinaokna][h]
 						    + beforw[w][(h + visotaokna - 1)% visotaokna]
@@ -83,7 +83,7 @@ int main()
 						    + beforw[(w + shirinaokna - 1) % shirinaokna][(h + visotaokna + 1) % visotaokna]
 						    + beforw[(w + shirinaokna + 1) % shirinaokna][(h + visotaokna + 1) % visotaokna];
 						     
-
+                                        //Снизу правила игры(можна менять)
 					if (beforw[w][h] == true)
 					{
 						 if (neigbour < 2 || neigbour > 3)
@@ -93,15 +93,16 @@ int main()
 					}
 					else
 					{
-                        if (neigbour == 3)
+                                                if (neigbour == 3)
 						{
 							afterw[w][h] = true;
 						}
                        
 					}
+                                        //Конец правил игры
 			    }
 	           
-			}//loopand
+			}
 
                    for (int w = 0; w < shirinaokna; w++)
 			       {
@@ -112,12 +113,12 @@ int main()
 
 			       }
 
-		}//timer
-		window.clear(Color::White);
+		}
+		window.clear(Color::White);//Цвет окна
 
 
 
-	            for (int w = 0; w < shirinaokna; w++)
+	            for (int w = 0; w < shirinaokna; w++)//отрисовка клеток
 				{
 					for (int h = 0; h < visotaokna; h++)
 					{
@@ -131,6 +132,7 @@ int main()
 				}
 				
 
+                                        //Измемение цвета(лень было свитч использовать)
 
 					if (Keyboard::isKeyPressed(Keyboard::Num1))
 					{
@@ -172,8 +174,8 @@ int main()
 		
 		
 		
-		window.display();
-	}//while
+		window.display();//отрисовка всего в окне
+	}
 
 
 	return 0;
