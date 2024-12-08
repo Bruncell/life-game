@@ -1,0 +1,180 @@
+#include <SFML/Graphics.hpp>
+#include <iostream>
+
+using namespace sf;
+
+
+
+int main()
+{
+	const int shirinaokna = 300;
+	const int visotaokna = 150;
+	const int tilescale = 3;
+	bool beforw[shirinaokna][visotaokna] = { 0 };
+	bool afterw[shirinaokna][visotaokna] = { 0 };
+	float zaderjka = 0.005f;
+	int neigbour;
+
+
+    RectangleShape tileBlack(Vector2f(tilescale, tilescale));
+	tileBlack.setFillColor(Color::Black);
+
+	
+
+	RenderWindow window(VideoMode(shirinaokna * tilescale, visotaokna * tilescale), "Life game");
+	
+	
+	
+
+	Clock clock;
+	float time;
+	while (window.isOpen())
+	{
+
+		time = clock.getElapsedTime().asSeconds();
+
+		Event event;
+		while (window.pollEvent(event)){if (event.type == Event::Closed)  window.close();}
+			
+		Vector2i PixelyPos = Mouse::getPosition(window);
+		Vector2f mospos = window.mapPixelToCoords(PixelyPos);
+
+		if (Mouse::isButtonPressed(Mouse::Left))
+		{
+			beforw[int(mospos.x / tilescale)][int(mospos.y / tilescale)] = true;
+			afterw[int(mospos.x / tilescale)][int(mospos.y / tilescale)] = true;
+		}
+		if (Mouse::isButtonPressed(Mouse::Right))
+		{
+			beforw[int(mospos.x / tilescale)][int(mospos.y / tilescale)] = false;
+			afterw[int(mospos.x / tilescale)][int(mospos.y / tilescale)] = false;
+		}
+
+		if(Keyboard::isKeyPressed(Keyboard::R))
+		{
+			for (int w = 0; w < shirinaokna; w++)
+			{
+				for (int h = 0; h < visotaokna; h++)
+				{
+					beforw[w][h] = false;
+					afterw[w][h] = false;
+				}
+
+			}
+		}
+		
+
+		
+
+		if (Keyboard::isKeyPressed(Keyboard::W) && zaderjka <= time )
+		{
+			clock.restart();
+
+			for (int w = 0; w < shirinaokna; w++)
+			{
+				for (int h = 0; h < visotaokna; h++)
+				{
+				   neigbour = beforw[(w + shirinaokna - 1) % shirinaokna][h]
+					       	+ beforw[(w + shirinaokna + 1) % shirinaokna][h]
+						    + beforw[w][(h + visotaokna - 1)% visotaokna]
+						    + beforw[w][(h + visotaokna + 1) % visotaokna]
+						    + beforw[(w + shirinaokna - 1) % shirinaokna][(h + visotaokna - 1) % visotaokna]
+						    + beforw[(w + shirinaokna + 1) % shirinaokna][(h + visotaokna - 1) % visotaokna]
+						    + beforw[(w + shirinaokna - 1) % shirinaokna][(h + visotaokna + 1) % visotaokna]
+						    + beforw[(w + shirinaokna + 1) % shirinaokna][(h + visotaokna + 1) % visotaokna];
+						     
+
+					if (beforw[w][h] == true)
+					{
+						 if (neigbour < 2 || neigbour > 3)
+						 {
+							afterw[w][h] = false;
+						 }
+					}
+					else
+					{
+                        if (neigbour == 3)
+						{
+							afterw[w][h] = true;
+						}
+                       
+					}
+			    }
+	           
+			}//loopand
+
+                   for (int w = 0; w < shirinaokna; w++)
+			       {
+				    for (int h = 0; h < visotaokna; h++)
+				    {
+					beforw[w][h] = afterw[w][h];
+				    }
+
+			       }
+
+		}//timer
+		window.clear(Color::White);
+
+
+
+	            for (int w = 0; w < shirinaokna; w++)
+				{
+					for (int h = 0; h < visotaokna; h++)
+					{
+						if (beforw[w][h] == true)
+						{
+							tileBlack.setPosition(Vector2f(w * tilescale, h * tilescale));
+							window.draw(tileBlack);
+						}
+					}
+
+				}
+				
+
+
+					if (Keyboard::isKeyPressed(Keyboard::Num1))
+					{
+						tileBlack.setFillColor(Color::Black);
+					}
+					if (Keyboard::isKeyPressed(Keyboard::Num2))
+					{
+						tileBlack.setFillColor(Color::Green);
+					}
+					if (Keyboard::isKeyPressed(Keyboard::Num3))
+					{
+						tileBlack.setFillColor(Color::Red);
+					}
+					if (Keyboard::isKeyPressed(Keyboard::Num4))
+					{
+						tileBlack.setFillColor(Color::Blue);
+					}
+					if (Keyboard::isKeyPressed(Keyboard::Num5))
+					{
+						tileBlack.setFillColor(Color::Yellow);
+					}
+					if (Keyboard::isKeyPressed(Keyboard::Num6))
+					{
+						tileBlack.setFillColor(Color::Cyan);
+					}
+					if (Keyboard::isKeyPressed(Keyboard::Num7))
+					{
+						tileBlack.setFillColor(Color::Magenta);
+					}
+					if (Keyboard::isKeyPressed(Keyboard::Num8))
+					{
+						tileBlack.setFillColor(Color(50, 100, 12));
+					}
+					if (Keyboard::isKeyPressed(Keyboard::Num9))
+					{
+						tileBlack.setFillColor(Color(50, 50, 50));
+					}
+				
+		
+		
+		
+		window.display();
+	}//while
+
+
+	return 0;
+}
